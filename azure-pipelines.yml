@@ -22,8 +22,7 @@ stages:
     steps:
     - task: DockerInstaller@0
       inputs:
-        dockerVersion: '19.03'
-        releaseType: stable
+        dockerVersion: '20.10.0'
     - task: CmdLine@2
       inputs:
         script: 'docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t tea:$(tag) .'
