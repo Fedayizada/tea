@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: '$(Build)'
 
 stages:
 - stage: Build
@@ -20,13 +20,14 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    - task: DockerInstaller@0
       inputs:
-        repository: 'tea'
-        command: 'build'
-        Dockerfile: '**/Dockerfile'
-        tags: '$(tag)'
+        dockerVersion: '19.03'
+        releaseType: stable
+    - task: CmdLine@2
+      inputs:
+        script: 'docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t tea:$(tag) .'
+        
     - task: CmdLine@2
       inputs:
         script: 'docker image ls'
