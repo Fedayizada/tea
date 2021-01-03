@@ -44,6 +44,9 @@ stages:
         vmImage: 'ubuntu-latest'
         
       steps:
+      - task: DockerInstaller@0
+        inputs:
+          dockerVersion: '20.10.0'
       - task: AWSShellScript@1
         displayName: Login to ECR
         inputs:
@@ -68,4 +71,4 @@ stages:
           chartType: 'Name'
           chartName: 'tea'
           releaseName: 'tea'
-          overrideValues: 'ingress.enabled=true,image.repository="004889159502.dkr.ecr.us-east-1.amazonaws.com/tea":$(tag)'
+          overrideValues: 'ingress.enabled=true,image.repository="004889159502.dkr.ecr.us-east-1.amazonaws.com/tea":$(tag),affinity=true'
