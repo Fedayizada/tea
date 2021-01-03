@@ -24,12 +24,14 @@ stages:
       inputs:
         dockerVersion: '20.10.0'
     - task: AWSShellScript@1
+      displayName: Login to ECR
       inputs:
         awsCredentials: 'aws-demo'
         regionName: 'us-east-1'
         scriptType: 'inline'
         inlineScript: 'echo "loggin in to ECR" && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea"'
     - task: CmdLine@2
+      displayName: Build & Push Docker
       inputs:
         script: 'docker buildx create --name multiarch && docker buildx use multiarch && docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea":$(tag) . --push'
 - stage: Deploy
@@ -42,10 +44,28 @@ stages:
         vmImage: 'ubuntu-latest'
         
       steps:
-      - task: KubernetesManifest@0
+      - task: AWSShellScript@1
+        displayName: Login to ECR
         inputs:
-          action: 'deploy'
+          awsCredentials: 'aws-demo'
+          regionName: 'us-east-1'
+          scriptType: 'inline'
+          inlineScript: 'echo "loggin in to ECR" && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea"'
+      - task: CmdLine@2
+        displayName: Inspect Docker Image
+        inputs:
+          script: 'docker manifest inspect  "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:"$(tag) | jq -r ''[.manifests[].platform.architecture]| tostring'' >> ./tea/values.yaml'
+      - task: HelmInstaller@0
+        inputs:
+          helmVersion: '3.1.2'
+          checkLatestHelmVersion: false
+          installKubectl: true
+      - task: HelmDeploy@0
+        inputs:
+          connectionType: 'Kubernetes Service Connection'
           kubernetesServiceConnection: 'aws-eks-dev'
-          namespace: 'default'
-          manifests: 'deployment.yaml'
-          containers: '004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:$(tag)'
+          command: 'upgrade'
+          chartType: 'Name'
+          chartName: 'tea'
+          releaseName: 'tea'
+          overrideValues: 'ingress.enabled=true,image.repository="004889159502.dkr.ecr.us-east-1.amazonaws.com/tea":$(tag)'
