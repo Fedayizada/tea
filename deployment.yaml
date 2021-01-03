@@ -21,7 +21,7 @@ spec:
               - key: kubernetes.io/arch
                 operator: In
                 values:
-                - amd64
+                - arm64
       containers:
       - image: 004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:12
         imagePullPolicy: IfNotPresent
