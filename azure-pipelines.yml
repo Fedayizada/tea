@@ -54,7 +54,7 @@ stages:
       - task: CmdLine@2
         displayName: Inspect Docker Image
         inputs:
-          script: 'docker manifest inspect  "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:"$(tag) | jq -r ''[.manifests[].platform.architecture]| tostring'' >> ./tea/values.yaml'
+          script: 'archs=$(docker manifest inspect  "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:12" | jq -r '[.manifests[].platform.architecture]| tostring') && echo architectures: $archs >> ./tea/values.yaml'
       - task: HelmInstaller@0
         inputs:
           helmVersion: '3.1.2'

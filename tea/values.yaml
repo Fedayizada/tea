@@ -75,5 +75,3 @@ resources: {}
 nodeSelector: {}
 
 tolerations: []
-
-architectures: 
