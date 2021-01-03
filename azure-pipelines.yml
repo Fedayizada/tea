@@ -23,19 +23,12 @@ stages:
     - task: DockerInstaller@0
       inputs:
         dockerVersion: '20.10.0'
-    - task: CmdLine@2
-      inputs:
-        script: 'docker buildx create --name multiarch && docker buildx use multiarch && docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t tea:$(tag) .'
-        
-    - task: CmdLine@2
-      inputs:
-        script: 'docker image ls'
-    - task: ECRPushImage@1
+    - task: AWSShellScript@1
       inputs:
         awsCredentials: 'aws-demo'
         regionName: 'us-east-1'
-        imageSource: 'imagename'
-        sourceImageName: 'tea'
-        sourceImageTag: '$(tag)'
-        repositoryName: 'tea'
-        pushTag: '$(tag)'
+        scriptType: 'inline'
+        inlineScript: 'echo "loggin in to ECR" && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea"'
+    - task: CmdLine@2
+      inputs:
+        script: 'docker buildx create --name multiarch && docker buildx use multiarch && docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t "004889159502.dkr.ecr.us-east-1.amazonaws.com":$(tag) . --push'
