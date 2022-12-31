@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   annotations:
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"RedirectConfig":{"Port":"443","Protocol":"HTTPS","StatusCode":"HTTP_301"},"Type":"redirect"}'
-    alb.ingress.kubernetes.io/group.name: cafe
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
