@@ -7,7 +7,6 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: instance
     kubernetes.io/ingress.class: alb
-  generation: 3
   name: tea
   namespace: default
 spec:
