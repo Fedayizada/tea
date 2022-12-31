@@ -13,15 +13,6 @@ spec:
       labels:
         app: tea
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/arch
-                operator: In
-                values:
-                - arm64
       containers:
       - image: 004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:e512340b-2-5
         imagePullPolicy: IfNotPresent
