@@ -23,7 +23,7 @@ spec:
                 values:
                 - arm64
       containers:
-      - image: 004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:12
+      - image: 004889159502.dkr.ecr.us-east-1.amazonaws.com/tea:e512340b-2-5
         imagePullPolicy: IfNotPresent
         name: tea
         ports:
