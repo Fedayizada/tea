@@ -57,7 +57,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              {{- include "tea.selectorLabels" . | nindent 14 }}
+              app.kubernetes.io/name: tea
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
