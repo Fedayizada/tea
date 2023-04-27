@@ -58,12 +58,6 @@ spec:
           labelSelector:
             matchLabels:
               {{- include "tea.selectorLabels" . | nindent 14 }}
-        - maxSkew: 1
-          topologyKey: karpenter.sh/capacity-type
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              {{- include "tea.selectorLabels" . | nindent 14 }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
