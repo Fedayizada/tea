@@ -5,7 +5,7 @@
 replicaCount: 10
 
 image:
-  name: "004889159502.dkr.ecr.us-east-1.amazonaws.com/tea"
+  name: ".dkr.ecr.us-east-1.amazonaws.com/tea"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
